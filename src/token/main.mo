@@ -19,4 +19,8 @@ public query func balanceOf( who:Principal): async Nat{
 return balance;
 };
 
+public query func getSymbol() : async Text{
+ return symbol;
+};
+
 };
