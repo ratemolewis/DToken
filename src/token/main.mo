@@ -1,6 +1,7 @@
 import Principal "mo:base/Principal";
 import HashMap "mo:base/HashMap";
 import Nat "mo:base/Nat";
+import Debug "mo:base/Debug";
 actor {
 var owner: Principal = Principal.fromText("dhahj-k55nz-744ow-t47cn-tztwp-bx3hn-e3ksp-vz6nz-d4bpp-ibj5z-nqe");
 var totalSupply: Nat = 1000000000;
@@ -22,5 +23,20 @@ return balance;
 public query func getSymbol() : async Text{
  return symbol;
 };
+
+public shared(msg) func payOut(): async Text{
+  // Debug.print(debug_show(msg.caller));
+  //check if a user already has claimed tokens
+  if(balances.get(msg.caller) == null){
+  let amount = 10000;
+  balances.put(msg.caller, amount);
+
+  return "Success";
+  }else {
+   return "Already Claimed";
+  }
+  
+  
+}
 
 };
