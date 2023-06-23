@@ -25,7 +25,7 @@ public query func getSymbol() : async Text{
 };
 
 public shared(msg) func payOut(): async Text{
-  // Debug.print(debug_show(msg.caller));
+   Debug.print(debug_show(msg.caller));
   //check if a user already has claimed tokens
   if(balances.get(msg.caller) == null){
   let amount = 10000;
@@ -34,9 +34,25 @@ public shared(msg) func payOut(): async Text{
   return "Success";
   }else {
    return "Already Claimed";
+  }  
+};
+
+public shared(msg) func transfer(to:Principal, amount:Nat): async Text{
+  let fromBalance = await balanceOf(msg.caller) ;
+
+  if(fromBalance > amount){
+    let newFromBalance: Nat = fromBalance - amount;
+    balances.put(msg.caller, newFromBalance);
+
+    let ToBalance = await balanceOf(to);
+    let newToBalance = ToBalance + amount;
+    balances.put(to, newToBalance);
+    
+   return "Success";
+  }else{
+   return "Insufficient Funds";
   }
   
-  
-}
+};
 
 };
