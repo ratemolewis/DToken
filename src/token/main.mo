@@ -2,13 +2,19 @@ import Principal "mo:base/Principal";
 import HashMap "mo:base/HashMap";
 import Nat "mo:base/Nat";
 import Debug "mo:base/Debug";
+import Iter "mo:base/Iter";
 actor {
-var owner: Principal = Principal.fromText("dhahj-k55nz-744ow-t47cn-tztwp-bx3hn-e3ksp-vz6nz-d4bpp-ibj5z-nqe");
-var totalSupply: Nat = 1000000000;
-var symbol: Text = "DANG";
+ Debug.print("Hello");
+let owner: Principal = Principal.fromText("dhahj-k55nz-744ow-t47cn-tztwp-bx3hn-e3ksp-vz6nz-d4bpp-ibj5z-nqe");
+let totalSupply: Nat = 1000000000;
+let symbol: Text = "DANG";
+
+private stable var balanceEntries: [(Principal, Nat)] = [];
 //ledger creation
-var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal,Principal.hash);
-balances.put(owner, totalSupply);
+private  var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal,Principal.hash);
+ if(balances.size() < 1){
+    balances.put(owner, totalSupply);
+   };
 
 public query func balanceOf( who:Principal): async Nat{
   //options address ?Nat
@@ -55,5 +61,15 @@ public shared(msg) func transfer(to:Principal, amount:Nat): async Text{
   }
   
 };
+ system func preupgrade() {
+    balanceEntries := Iter.toArray(balances.entries());
+  };
+
+  system func postupgrade() {
+   balances := HashMap.fromIter<Principal, Nat>(balanceEntries.vals(),1, Principal.equal,Principal.hash);
+   if(balances.size() < 1){
+    balances.put(owner, totalSupply);
+   };
+  };
 
 };
