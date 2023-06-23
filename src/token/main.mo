@@ -29,9 +29,10 @@ public shared(msg) func payOut(): async Text{
   //check if a user already has claimed tokens
   if(balances.get(msg.caller) == null){
   let amount = 10000;
-  balances.put(msg.caller, amount);
-
-  return "Success";
+  // balances.put(msg.caller, amount);
+  let result = await transfer(msg.caller, amount);
+  return result;
+  //return "Success";
   }else {
    return "Already Claimed";
   }  
