@@ -18,14 +18,19 @@ if(authClient.isAuthenticated()){
   await authClient.login({
     identityProvider : "https://identity.ic0.app/#authorize",
     onSuccess : () => {
-      handeleAuthenticated(authClient);
+      handeleAuthenticated(authClient); 
     }
   });
 }
 }
 
 async  function handeleAuthenticated(authClient){
-  await ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+  //  bellow commented lines should be uncommented if the app is deployed to IC
+  // const identity = await authClient.getIdentity();
+  // const userPrincipal = identity._principal.toString();
+  // console.log(userPrincipal);
+//  pass this loggedinPrincial={userPrincipal} prop: to the app component
+  await ReactDOM.createRoot(document.getElementById('root')).render(<App  />)
 }
 
 init();
